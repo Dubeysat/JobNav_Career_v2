@@ -8,7 +8,7 @@ engine = create_engine(db_connection_string,
                        }})
 
 
-def load_job_from_db():
+def load_jobs_from_db():
   with engine.connect() as conn:
     result = conn.execute(text("SELECT * FROM jobs"))
     jobs = []
@@ -17,3 +17,15 @@ def load_job_from_db():
       jobs.append(row._asdict())
 
   return (jobs)
+
+
+def load_job_from_db(id):
+  with engine.connect() as conn:
+    query = text("SELECT * FROM jobs where id = :val").bindparams(val=id)
+    result2 = conn.execute(query)
+    resultall2 = result2.fetchall()
+    if len(resultall2) == 0:
+      print("No rows found.")
+    else:
+      for row in resultall2:
+        return (row._asdict())
